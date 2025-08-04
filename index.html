@@ -1347,6 +1347,10 @@
             // Hide typing indicator
             hideTypingIndicator();
             
+            // Calculate totals for follow-up logic BEFORE adding response
+            const totalUsed = messagesUsed + oneTimeMessagesUsed;
+            const totalAvailable = freeMessageLimit + (hasOneTimeDonation ? oneTimeMessageLimit : 0);
+
             // Add Buddha's response
             addMessage(question, false);
             
@@ -1355,10 +1359,6 @@
             button.disabled = false;
             input.focus();
 
-            // Calculate totals for follow-up logic
-            const totalUsed = messagesUsed + oneTimeMessagesUsed;
-            const totalAvailable = freeMessageLimit + (hasOneTimeDonation ? oneTimeMessageLimit : 0);
-
             // Encourage follow-up question after first answer (only if not hitting limits)
             if (messagesUsed === 1 && !isSubscribed && totalUsed < totalAvailable) {
                 setTimeout(() => {
@@ -1366,9 +1366,8 @@
                 }, 2000);
             }
             
-            // Show donation prompt if user is at limit
-            
-            if (!isSubscribed && totalUsed === totalAvailable) {
+            // Show donation prompt if user is at limit (but not if follow-up was shown)
+            else if (!isSubscribed && totalUsed === totalAvailable) {
                 setTimeout(() => {
                     addMessage("🙏 You've used your free question. To continue our conversation and get more personalized guidance, please consider making a donation to support Buddha's wisdom.", false);
                 }, 1000);

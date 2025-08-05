@@ -1233,6 +1233,99 @@
             };
         }
 
+        // Track usage for donation prompts
+        let questionCount = parseInt(localStorage.getItem('buddhaQuestionCount') || '0');
+        let totalUsed = parseInt(localStorage.getItem('totalUsed') || '0');
+
+        function getFollowUpQuestion(originalQuestion) {
+            const lowerQuestion = originalQuestion.toLowerCase();
+            
+            // Work-related follow-ups - more emotional and personal
+            if (lowerQuestion.includes('boss') && (lowerQuestion.includes('toxic') || lowerQuestion.includes('bad'))) {
+                const followUps = [
+                    "What's the most soul-crushing thing your boss has done lately? I want to understand what you're really going through.",
+                    "How is this toxic situation affecting your confidence and energy outside of work?",
+                    "What would you tell your best friend if they were in your exact situation right now?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            if (lowerQuestion.includes('work') && lowerQuestion.includes('stress')) {
+                const followUps = [
+                    "What's the voice in your head saying when you're most overwhelmed at work?",
+                    "If you could change just ONE thing about your work situation tomorrow, what would instantly make you feel lighter?",
+                    "What did work feel like before it became this stressful? What changed?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // Dating follow-ups - more vulnerable
+            if (lowerQuestion.includes('dating') || lowerQuestion.includes('ghost')) {
+                const followUps = [
+                    "What's the story you tell yourself about why people ghost you? Is that story serving you?",
+                    "When you imagine your ideal relationship, what does it FEEL like day-to-day?",
+                    "What are you most afraid of in dating - rejection, vulnerability, or wasting time?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // Social media follow-ups - more introspective  
+            if (lowerQuestion.includes('social media')) {
+                const followUps = [
+                    "What are you really looking for when you scroll social media? Connection, validation, or escape?",
+                    "What would you create or accomplish if you redirected your scrolling time for just one week?",
+                    "What's the underlying feeling that makes you reach for your phone? Boredom, loneliness, or anxiety?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // Money follow-ups - more specific
+            if (lowerQuestion.includes('money') || lowerQuestion.includes('broke')) {
+                const followUps = [
+                    "What's your earliest memory about money? How do you think that shaped how you feel about it now?",
+                    "If money stress disappeared tomorrow, what would you actually spend your mental energy on instead?",
+                    "What would financial peace actually look like in your daily life - not the big dreams, but the small moments?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // Family follow-ups - more psychological
+            if (lowerQuestion.includes('family')) {
+                const followUps = [
+                    "What's the thing your family does that triggers you most? What do you think that reveals about what you need?",
+                    "If you could have one honest conversation with your family without any drama, what would you say?",
+                    "What would it feel like to love your family while completely accepting they may never change?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // Life direction follow-ups - more existential
+            if (lowerQuestion.includes('stuck') || lowerQuestion.includes('lost')) {
+                const followUps = [
+                    "What's the scariest thing about being stuck - the uncertainty, or the possibility of choosing wrong?",
+                    "If you knew you couldn't fail, what would you try first? What's really holding you back from that?",
+                    "What would 80-year-old you say about this period of feeling lost? Would they be worried or patient?"
+                ];
+                return followUps[Math.floor(Math.random() * followUps.length)];
+            }
+            
+            // High-impact default follow-ups
+            const deepFollowUps = [
+                "What's the thing you're not telling anyone about this situation? Sometimes the unsaid part holds the key.",
+                "If this challenge is here to teach you something, what do you think the lesson might be?",
+                "What would change in your life if you handled this situation with complete confidence?",
+                "What's the deeper fear underneath this surface problem?",
+                "If you could go back and give yourself advice before this situation started, what would you say?",
+                "What would someone who loves you unconditionally want you to know about this?",
+                "What's the story you're telling yourself about why this is happening to you?"
+            ];
+            
+            return deepFollowUps[Math.floor(Math.random() * deepFollowUps.length)];
+        }
+
+        function shouldShowDonationPrompt() {
+            return totalUsed >= 1; // Keep existing donation after 1 question
+        }
+
         function addMessage(content, isUser = false) {
             const chatContainer = document.getElementById('chatContainer');
             const messageDiv = document.createElement('div');
@@ -1251,6 +1344,9 @@
                 `;
             } else {
                 const response = getModernResponse(content);
+                const followUp = getFollowUpQuestion(content);
+                const showDonation = shouldShowDonationPrompt();
+                
                 messageDiv.innerHTML = `
                     <div class="message-avatar">🧘‍♂️</div>
                     <div class="message-content">
@@ -1270,10 +1366,10 @@
                             `).join('')}
                         </div>
                         <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 3px solid #667eea;">
-                            <strong>💭</strong> Which of these steps resonates most with you? Do you have questions about implementing any of them? Or is there another aspect of your situation you'd like to explore? I'm here to help you go deeper.
+                            <strong>💭 Let's go deeper:</strong> ${followUp}
                         </div>
                         <div style="background: rgba(255, 193, 7, 0.1); padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 0.85em; color: #856404;">
-                            <strong>📚 AI Guidance:</strong> This response is AI-generated based on Buddhist principles. For authentic Dharma study, consult qualified teachers or texts like the <a href="https://suttacentral.net" target="_blank" style="color: #856404;">Pali Canon</a> or <a href="https://84000.co" target="_blank" style="color: #856404;">Mahayana Sutras</a>.
+                            <strong>📚 AI Guidance:</strong> This response is AI-generated based on Buddhist principles. For authentic Dharma study, consult qualified teachers or texts like the <a href="https://suttacentral.net" target="_blank" style="color: #1e40af;">Pali Canon</a> or <a href="https://84000.co" target="_blank" style="color: #1e40af;">Mahayana Sutras</a>.
                         </div>
                         <div class="message-time">${timeString}</div>
                     </div>
@@ -1334,6 +1430,10 @@
                 }
                 updateUsageDisplay();
             }
+            
+            // Track total question count for follow-up logic
+            questionCount++;
+            localStorage.setItem('buddhaQuestionCount', questionCount.toString());
             
             // Clear input
             input.value = '';
@@ -1505,6 +1605,12 @@
                 content.style.display = 'none';
                 icon.textContent = '▼';
             }
+        }
+
+        // Enhanced askProblem function for quick problem buttons
+        function askProblem(problem) {
+            document.getElementById('questionInput').value = problem;
+            askBuddha();
         }
     </script>
 </body>

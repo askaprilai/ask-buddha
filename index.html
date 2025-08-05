@@ -801,12 +801,12 @@
 
         <!-- Usage Counter for Free Users -->
         <div class="usage-counter" id="usageCounter" style="display: none;">
-            <strong>Free Wish:</strong> <span id="messagesLeft">1</span> question remaining
+            <strong>Free Questions:</strong> <span id="messagesLeft">2</span> questions remaining
         </div>
 
         <!-- Donation Banner -->
         <div class="upgrade-banner" id="upgradeBanner" style="display: none;">
-            <div><strong>🙏 You've used your free question!</strong></div>
+            <div><strong>🙏 You've used your 2 free questions!</strong></div>
             <div>Please consider making a donation to continue receiving Buddha's wisdom</div>
             <button class="upgrade-btn" onclick="showDonationModal()">Make a Donation</button>
         </div>
@@ -987,7 +987,7 @@
         let hasOneTimeDonation = localStorage.getItem('buddha_onetime') === 'true';
         let messagesUsed = parseInt(localStorage.getItem('buddha_messages_used') || '0');
         let oneTimeMessagesUsed = parseInt(localStorage.getItem('buddha_onetime_used') || '0');
-        const freeMessageLimit = 1;
+        const freeMessageLimit = 2;
         const oneTimeMessageLimit = 5;
         let selectedDonationType = 'onetime';
 
